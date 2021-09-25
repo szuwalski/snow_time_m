@@ -1,13 +1,13 @@
 ---
 author: "Cody Szuwalski"
-date: "May 17, 2021"
+date:
 output:
   pdf_document:
     fig_caption: yes
     fig_height: 4
     fig_width: 6
 header-includes:   
--  \pagenumbering{gobble}
+#-  \pagenumbering{gobble}
 csl: fish-and-fisheries.csl
 title: "Estimating time-variation in confounded processes in population dynamics modeling: a case study for snow crab in the eastern Bering Sea"
 ---
@@ -227,31 +227,33 @@ for(x in 1:length(Scenarios))
 
 
 
-Population dynamics models used to provide management advice for harvested natural resources often estimate population processes that can be mutually confounded. These processes (e.g. natural mortality (M), catchability (q), growth) are often assumed to be time-invariant, but this assumption can be difficult to meet in real populations. Not allowing for time-variation in these processes can result in retrospective patterns in estimated biomass, which can result in errors in management advice. Allowing for time-variation in these processes can also result in errors in management advice if the estimated time-variation does not reflect the true underlying variation. Here I present a population dynamics model for snow crab in the eastern Bering Sea that tests different combinations of implementation of time-variation in M and q.  The managing body for snow crab did not adopt any of the models with time-variation in M or q for management because the estimated variability in M and q was difficult to explain with any known mechanism and the management advice differed by nearly an order of magnitude among the models. This outcome underscores the importance of evidence-based approaches to incorporating time-variation into stock assessment models.
+Population dynamics models used to provide management advice for harvested natural resources often estimate population processes that can be mutually confounded. These processes (e.g. natural mortality (M), catchability (q), growth) are often assumed to be time-invariant, but this assumption can be difficult to meet in real populations. Not allowing for time-variation in these processes can result in retrospective patterns in estimated biomass, which can result in errors in management advice. Allowing for time-variation in these processes can also result in errors in management advice if the estimated time-variation does not reflect the true underlying variation. Here I present a population dynamics model for snow crab in the eastern Bering Sea that tests different combinations of implementation of time-variation in M and q.  The managing body for snow crab did not adopt any of the models with time-variation in M or q for management because the estimated variability in M and q was difficult to explain with any known mechanism and management advice differed by nearly an order of magnitude among models. Large differences in management advice underscores the importance of evidence-based approaches to incorporating time-variation into stock assessment models.
 
 \newpage
 # Introduction
 
-Modeling the dynamics of populations often requires making simplifying assumptions to produce tenable models. For example, in fisheries stock assessment, population processes like natural mortality, catchability, growth, and maturity are often assumed to be time-invariant. However, this assumption has been shown to be false for some populations. For example, THIS, THIS, and THIS. Even for populations for which little evidence exists to demonstrate time variation in a particular process, time-variation can be suspected (REF). 
+Modeling the dynamics of populations often requires making simplifying assumptions to produce tenable models. For example, in fisheries stock assessment, population processes like natural mortality, catchability, growth, and maturity are often assumed to be time-invariant. However, this assumption has been shown to be false for some populations. For example, Wilberg et al. (2009) collated published evidence for changes in catchability for XX stocks, Stawitz et al. (2014) demonstrated considerable variabilty in growth for stocks in the Bering Sea, and Jacobsen and Essington (2018) cataloged changes in natural mortality for forage fish in European waters. The potential for non-stationarity in population processes will likely increase as climate changes globally (Szuwalski and Hollowed, 2016). 
 
-Satisfactorily addressing the potential that other confounding processes are not driving observed changes in a stock is a key concern in convincingly estimating time-variation in stock assessment. Similar changes in the observed indices of abundance can be cause by changes in natural mortality, selectivity, growth, or catchability (REF). Kill them or hide them. Data to inform are often scarce.
+Satisfactorily addressing the potential that other confounding processes are not driving observed changes in a stock is a key concern in convincingly estimating time-variation in stock assessment. Similar changes in the observed indices of abundance can be cause by changes in natural mortality, selectivity, growth, or catchability (e.g. Thompson, 1994). A decline in biomass in the terminal year of the time series can arise from increased natural mortality, decreased selectivity or catchability, or decreases in growth. This confounding can lead to the dilemma of 'Kill them or hide them?' when assessing stocks in which there are unexpected declines (Taylor and Methot, 2014). Data to distinguish between mortality events and changes in selectivity are often difficult to procure and, even when the data are possible to collect, often arrive after the point in time at which they are needed to establish management advice. 
 
-Given the above issues, population dynamics models used to manage harvested natural resources need to strike a balance between simplicity and complexity in modeling assumptions that appropriately captures the processes important in determining sustainable harvests (e.g. natural mortality, growth, selectivity, catchability, and maturity) without overstepping the information content in the data. In general, three pieces of information are needed in harvest control rules that produce catch recommendations: biomass at the time of the next fishery, a target biomass, and a target fishing mortality. Broadly speaking, these pieces represent the current status of a fishery, the target status for a fishery, and the pathway for how to achieve the target from the current situation. Oftentimes the biomass and fishing mortality targets are based on maximum sustainable yield calculations (REF) or proxies thereof (REF).
+Given the above issues, population dynamics models used to manage harvested natural resources often seek to strike a balance between simplicity and complexity in modeling assumptions that appropriately captures the processes important in determining sustainable harvests (e.g. natural mortality, growth, selectivity, catchability, and maturity) without overstepping the information content in the data. In general, three pieces of information are needed in harvest control rules that produce catch recommendations: biomass at the time of the next fishery, a target biomass, and a target fishing mortality. Broadly speaking, these pieces represent the current status of a fishery, the target status for a fishery, and the pathway for how to achieve the target from the current situation. Oftentimes the biomass and fishing mortality targets are based on maximum sustainable yield calculations (e.g. Schaefer, 1954) or proxies thereof (e.g Clark, 1991).
 
-Each of these pieces of information can be influenced by the assumptions about population processes made while developing a population dynamics model. Assuming time-invariance in the population processes that influence estimates of current biomass can produce retrospective patterns and lead to ineffective management advice if those processes vary over time (REF). Assuming time-invariance in the population processes that determine the management targets for biomass and fishing mortality may be reasonable if the forcing of these processes is stationary because the targets should represent the mean state of the system. However, if the environmental forcing of these processes is non-stationary (i.e. the mean changes over time), changes in population processes result in changes in management quantities (Thorson et al. 2015) and decisions must be made about the time period used to calculate management targets (REF).  
+Each of these pieces of information can be influenced by the assumptions about population processes made while developing a population dynamics model. Assuming time-invariance in the population processes that influence estimates of current biomass can produce retrospective patterns and lead to ineffective management advice if those processes vary over time (REF). Assuming time-invariance in the population processes that determine the management targets for biomass and fishing mortality may be reasonable if the forcing of these processes is stationary because the targets should represent the mean state of the system. However, if the environmental forcing of these processes is non-stationary (i.e. the mean changes over time), changes in population processes result in changes in management quantities (Thorson et al. 2015) and decisions must be made about the time period used as a reference to calculate management targets (NPFMC, 2008).  
 
-Snow crab in the eastern Bering Sea present appears to have time-variation in population processes (Murphy et al. 2020, Somerton et al. 2013) and is at least at risk of non-stationarity in these population processes (REF). The snow crab fishery only retains large male crab with carapace width greater than 101 mm. The reproductive dynamics of snow crab appear to be related to ice cover and the Arctic Oscillation (Szuwalski et al., 2020). The National Marine Fishery Services (NMFS) summer trawl survey is a key information source in the stock assessment for snow crab and large pseudocohorts have appeared in the survey three times since 1982 (\autoref{}). The most recent large pseudocohort was spawned in 2010 and recruited to the survey gear in 2015. By 2018, it was the largest pseudocohort observed in the survey data (\autoref{}). However, in 2019, it was much smaller than it should have been given estimated growth, natural mortality, and fishing removals (\autoref{}).  This strongly implies either time-variation in some population process and catchability or natural mortality are the key suspects. However, there are few data to decisively indicate which process is varying over time. No survey was performed in 2020 as a result of the coronavirus, so the managing body was in the unprecedented position of setting the overfishing level (i.e. the level of catch beyond which overfishing would occur) in a year with no survey data and in the context of a large drop in the previous year of survey data that could be attributed to either natural mortality or catchability.
+Snow crab in the eastern Bering Sea present appears to have time-variation in population processes (Murphy et al. 2020, Somerton et al. 2013) and is at least at risk of non-stationarity in some population processes (particularly those related to ice extent like recruitment; Szuwalski et al., 2020). The snow crab fishery has been managed with individual transferable quotas since 2004 and only retains large male crab with carapace width greater than 101 mm (\autoref{fish_hist}). Catches were highest in the 1990s, after which the stock biomass declined sharply and the stock was declared overfished in 1999. The National Marine Fishery Services (NMFS) summer trawl survey is a key information source in the stock assessment for snow crab and large pseudocohorts have appeared in the survey three times since 1982 (\autoref{fish_hist} & \autoref{n_at_len}). 
 
-To further complicate the issue, there was no survey performed in 2020 as a result of the coronavirus pandemic. Here I present iterations of the assessment method used for snow crab that differ in the way that time-variation in natural mortality and/or catchability are modeled. I then compare the resulting fits to the data sources, the character and credibility of the estimated time-variation in q and M, and the knock-on effects in other confounded processes like maturity and recruitment. I conclude by examining the differences in management-related quantities (e.g. F35% and B35%), summarizing the discussion the management body held concerning these models, and discussing potential paths forward.   
+The most recent large pseudocohort was spawned in 2010 and recruited to the survey gear in 2015. By 2018, it was the largest pseudocohort observed in the survey data. However, in 2019, it was much smaller than it should have been given estimated growth, natural mortality, and fishing removals (\autoref{n_at_len}).  This strongly implies either time-variation in some population process and catchability or natural mortality are key suspects. However, there are few data to decisively indicate which process is varying over time. No survey was performed in 2020 as a result of the coronavirus pandemic, so the managing body was in the unprecedented position of setting the overfishing level (i.e. the level of catch beyond which overfishing would occur, used to set allowable biological catches) in a year with no survey data and in the context of a large drop in the previous year of survey data that could be attributed to changes in either natural mortality or catchability.
+
+Here I present iterations of the assessment method used for snow crab that incorporate time-variation in natural mortality and/or catchability. I then compare the resulting fits to the data sources, the character and credibility of the estimated time-variation in q and M, and the knock-on effects in other confounded processes like maturity and recruitment. I conclude by examining the differences in management-related quantities (e.g. F~35%~ and B~35%~), summarizing the discussion the management body held concerning these models, and discussing potential paths forward.   
 
 # Methods
-The integrated size-structured model currently used (referred to here as the 'status quo' model) was developed following Fournier and Archibald's (1982) methods, with many similarities to Methot (1990). The population dynamics in the status quo model tracks the number of crab of sex *s*, maturity state *m*, during year *y* at length *l*, N~*s,m,y,l*~. A terminal molt occurs in which crab move from an immature to a mature state, after which no further molting occurs. The mid-points of the size bins tracked in the model span from 27.5 to 132.5mm carapace width, with 5 mm size classes. Parameters estimated within the assessment include those associated with recruitment, growth, natural mortality (subject to a fairly informative prior), fishing mortality, selectivity (fishery and survey), survey catchability, and probability of maturing.  Weight at length, discard mortality, bycatch mortality, and parameters associated with the variance in growth and proportion of recruitment allocated to size bin were estimated outside of the model or specified. Growth parameters are estimated outside of the model based measurements of pre-molt and post-molt carapace width for crab captured in the wild just prior to molting. Survey biomass indices and size composition data, directed fishery biomass and size composition data, and bycatch biomass and size composition data are fit to within the assessment. The assessment spans the years 1982 to 2020. See appendix A for a complete description of the population dynamics and visit the github repository for this paper to inspect the code. 
+The integrated size-structured model currently used (referred to here as the 'status quo' model) was developed by Turnock (2015) following Fournier and Archibald's (1982) methods, with many similarities to Methot (1990). The population dynamics in the status quo model tracks the number of crab of sex *s*, maturity state *m*, during year *y* at length *l*, N~*s,m,y,l*~. A terminal molt occurs in which crab move from an immature to a mature state, after which no further molting occurs. The mid-points of the size bins tracked in the model span from 27.5 to 132.5mm carapace width, with 5 mm size classes. Parameters estimated within the assessment include those associated with recruitment, natural mortality (subject to a fairly informative prior), fishing mortality, selectivity (fishery and survey), survey catchability, and probability of maturing.  Weight at length, discard mortality, bycatch mortality, and parameters associated with the variance in growth and proportion of recruitment allocated to size bin were estimated outside of the model or specified. Growth parameters were estimated outside of the model based measurements of pre-molt and post-molt carapace width for crab captured in the wild just prior to molting. Survey biomass indices and size composition data, directed fishery biomass and size composition data, and bycatch biomass and size composition data were fit to within the assessment. The assessment spans the years 1982 to 2020. See appendix A for a complete description of the population dynamics and visit the github repository for this paper to inspect the code. 
 
-The output of three models are compared to the status quo: "Vary M", "Vary q", and "Vary both". Each of these models builds on the status quo model and alters the way in which natural mortality ("Vary M"), catchability ("Vary q"), or both processes ("Vary both") are modeled. "Vary M" adds a vector of deviations to the existing estimated parameters for mature natural mortality of both sexes (i.e. a 'dev_vector' in ADMB). The dev_vector estimates an additional parameter for each year included in the assessment (1982-2020) for each sex. "Vary q" estimates a catchability parameter for each year from 1989-2020 for each sex. The estimated vectors of q are bounded by 0.2 and 1.0 based information from experimental net efficiency work for Bering Sea snow crab that suggests catchability should be within this range (REF). "Vary both" combines both of these changes into a single model. A smoothing penalty is added to the negative log likelihood of each model in the form of the squared norm of the second difference of each vector of additionally estimated estimated parameters multiplied by a user-defined weighting factor. The weights for the smoothing penalties were chosen by trial and error, with the aim of making them as small as possible while still avoiding convergence issues.
+The output of three models are compared to the status quo: "Vary M", "Vary q", and "Vary both". Each of these models builds on the status quo model and alters the way in which natural mortality ("Vary M"), catchability ("Vary q"), or both processes ("Vary both") are modeled. "Vary M" adds a vector of deviations to the existing estimated parameters for mature natural mortality of both sexes (i.e. a 'dev_vector' in ADMB). The dev_vector estimates an additional parameter for each year included in the assessment (1982-2020) for each sex. "Vary q" estimates a catchability parameter for each year from 1989-2020 for each sex. The estimated vectors of q are bounded by 0.2 and 1.0 based information from experimental net efficiency work for Bering Sea snow crab that suggests catchability should be within this range (Somerton et al., 2013). "Vary both" combines these changes into a single model. A smoothing penalty is added to the negative log likelihood of each model in the form of the squared norm of the second difference of each vector of additionally estimated estimated parameters multiplied by a user-defined weighting factor. The weights for the smoothing penalties were chosen by trial and error, with the aim of making them as small as possible while still avoiding convergence issues.
 
-Retrospective analyses were performed in which the terminal year of data was removed sequentially from the model fitting, then estimated management quantities (e.g. mature male biomass [MMB]) were compared between the model with the complete data set (i.e. 1982-2020) and successive 'peels' of the data to identify retrospective patterns. A retrospective pattern is a consistent directional change in assessment estimates of management quantities in a given year when additional years of data are added to an assessment. Mohn's rho (which computes the average difference between the reference case and the peels over the period of retrospective analysis) was calculated for each model to quantify the retrospective patterns. 
+Retrospective analyses were performed in which the terminal year of data was removed sequentially from the model fitting, then estimated management quantities (e.g. mature male biomass [MMB]) were compared between the model with the complete data set (i.e. 1982-2020) and successive 'peels' of the data to identify retrospective patterns. A retrospective pattern is a consistent directional change in assessment estimates of management quantities in a given year when additional years of data are added to an assessment. Mohn's rho (which computes the average difference between the reference case and the peels over the period of retrospective analysis; REF) was calculated for each model to quantify the retrospective patterns. 
 
-The overfishing level (OFL) is level of catch beyond which overfishing would be deemed to occur. The OFL is one of the key pieces of management advice that arises from the assessment and serves as the starting point for specifying an 'acceptable biological catch'. The OFL was calculated using proxies for biomass and fishing mortality reference points and a sloped control rule. Proxies for biomass and fishing mortality reference points were calculated using spawner-per-recruit methods (e.g. Clark, 1991). After fitting the assessment model to the data and estimating population parameters, the model was projected forward 100 years using the estimated parameters under no exploitation and constant recruitment to determine 'unfished' mature male biomass-per-recruit. For models in which time-variation was implemented, the average of the final 7 years of the process was used in projections. The bisection method was used iteratively to identify a fishing mortality that reduced the mature male biomass-per-recruit to 35% of the unfished level (i.e. F~35%~ and B~35%~). Calculations of F~*35%*~ were made under the assumption that bycatch fishing mortality was equal to the estimated average value. 
+The overfishing level (OFL) is level of catch beyond which overfishing would be deemed to occur. The OFL is one of the key pieces of management advice that arises from the assessment and serves as the starting point for specifying an 'acceptable biological catch', which constrains removals in the fishery. The OFL was calculated using proxies for biomass and fishing mortality reference points and a sloped control rule. Proxies for biomass and fishing mortality reference points were calculated using spawner-per-recruit methods (e.g. Clark, 1991). After fitting the assessment model to the data and estimating population parameters, the model was projected forward 100 years using the estimated parameters under no exploitation and constant recruitment to determine 'unfished' mature male biomass-per-recruit. For models in which time-variation was implemented, the average of the final 7 years of the process was used in projections. The bisection method was used iteratively to identify a fishing mortality that reduced the mature male biomass-per-recruit to 35% of the unfished level (i.e. F~35%~ and B~35%~). Calculations of F~*35%*~ were made under the assumption that bycatch fishing mortality was equal to the estimated average value. 
 
 Calculated values of F~35%~ and B~35%~ were used in conjunction with a sloped control rule to adjust the proportion of F~35%~ that is applied based on the status of the population relative to B~35%~ (Amendment 24, NMFS).
 
@@ -269,48 +271,34 @@ Where MMB is the projected mature male biomass in the current survey year after 
 
 # Results
 
-All models produced a positive-definite Hessian and had maximum gradient components less than 0.004, except "Vary both", which had a maximum gradient component of 0.01 for one of the recruitment deviations for males (the rest were < 0.004). The smallest viable smoothing penalties tested were 1 and 10 for natural mortality and catchability (respectively) when they were the only additional time-varying process in the assessment. When both processes were allowed to vary, the penalty for natural mortality had to be increased to 15 or the model did not converge. 
+All models produced a positive-definite Hessian and had maximum gradient components less than 0.004, except "Vary both", which had a maximum gradient component of 0.01 for one of the recruitment deviations for males (the rest were < 0.004). The smallest viable smoothing penalties tested were 1 and 10 for natural mortality and catchability (respectively) when they were the only additional time-varying process in the assessment. When both processes were allowed to vary, the smoothness penalty for natural mortality had to be increased to 15 or the model did not converge.  
 
 ### Fits to the data
-"Vary M", "Vary q", and "Vary both" all fit the survey MMB better than the status quo model (\autoref{mmbfits}), particularly in recent years. The status quo model missed the confidence intervals of 5 of the last 6 years of survey MMB, but additional time-variation predictably improved these fits. Fits to the catch data, growth data, and all size composition data sources can be seen in the appendix. In general, the fits were similar across models, except for the survey size composition data, in which there are several years in which models that allowed for additional time-variation produce much better fits than models that did not. Retrospective patterns in the status quo model (Mohn's rho = 0.36) were improved substantially by allowing additional time-variation in either natural mortality or catchability (\autoref{retro_mult}). 
+Models "Vary M", "Vary q", and "Vary both" all fit the survey MMB better than the status quo model (\autoref{mmbfits}, \autoref{sm_mmbfits},  and \autoref{objfun}), particularly in recent years. The status quo model missed the confidence intervals of 5 of the last 6 years of survey MMB, but additional time-variation improved these fits. Fits to the catch data, growth data, and all size composition data sources can be seen in the supplementary materials. In general, the fits were similar across models, except for the survey size composition data, in which there are several years in which models that allowed for additional time-variation produce much better fits than models that did not. Retrospective patterns in the status quo model (Mohn's rho = 0.36) were improved substantially by allowing additional time-variation in either natural mortality or catchability (\autoref{retro_mult}). 
 
 ## Estimated population processes and derived quantities
 
-Estimated population processes and derived quantities varied among models. Model "Vary both" produced the largest historical estimates of MMB (\autoref{predmmb}). 
+Estimated population processes and derived quantities varied among models. Model "Vary both" produced the largest historical estimates of MMB (\autoref{predmmb}). The shapes of the estimated curve representing the probability of maturing for males were similar among models, but the magnitude of the probabilities varied, most strongly for males in the 70-90 mm carapace width range (\autoref{est_pop_proc}). 'Vary both' estimated the highest fraction of sub-industry-preferred size (i.e. <101 mm carapace width) crab maturing. Trajectories of estimated fishing mortality were similar across models, but variability within years existed due to differing estimates of population size (\autoref{est_pop_proc}), which is an important determinant of F~35%~. Patterns in estimated recruitment were similar for all models, but the relative magnitudes varied (\autoref{est_pop_proc}). 
 
-All models estimated lower catchability in survey era 1 (1982-1988) relative to era 2 (1989-present) for males. The shapes of the NMFS selectivity curves were similar among all models; the largest changes were seen in the catchability coefficient (\autoref{predselect}). Status quo models that allowed at least one additional time-varying process (20.2q, 20.2m, 20.2mq) all had average catchabilities similar to the BSFRF implied catchability. However, the variability for 20.2q and 20.2mq was large, with estimated values ranging from ~0.2 to ~1 (\autoref{time_vary_q}). 
+Estimated natural mortality across models varied widely (\autoref{vary_nat_m_q}). Both model 'Vary both' and 'Vary M' estimated much higher natural mortality in recent years compared to historical estimates, but estimates from 'Vary both' increased very sharply starting in 2017 and ended with estimates in 2020 nearly double that of 'Vary M'. Estimates of mean natural mortality were smaller for models in which natural mortality was allowed to vary over time than for those in which natural mortality was constant over time. All models estimated lower catchability in survey era 1 (1982-1988) relative to era 2 (1989-present) for males. The shapes of the NMFS selectivity curves were similar among all models; the largest changes were seen in the catchability coefficient (see supplementary figures). Models in which catchability was time-varying estimated average catchabilities similar to the BSFRF implied catchability. However, the variability in estimated catchability for these models was large, with estimated values ranging from ~0.2 to ~1 (\autoref{vary_nat_m_q}). 
 
-Predicted availability curves for the BSFRF experimental surveys were similar across assessments in years with similar configurations (\autoref{predBSFRF}). The status quo assessment historically used a logistic curve for the availability for females in 2009, but this is likely overly restrictive. GMACS estimated a vector of availabilities for both years and sexes of BSFRF data, which more closely reflect the empirical availabilities.
+Differences in estimated population processes and fits to the data resulted in large differences in management advice (\autoref{stepchange}). The terminal year of estimated mature male biomass varied from 43,290 t to 133,510 t, with models estimating time-varying natural mortality returning much lower mature male biomass than those that did not. The corresponding target biomasses (B~35%~) were also much lower for models incorporating time-varying natural mortality because the projections used to calculate B~35%~ are based on the terminal years of estimated natural mortality, which were quite high (\autoref{vary_nat_m_q}). An additional effect of increases in estimated natural mortality (and changes in the probability of terminally molting; \autoref{est_pop_proc}) were large increases in F~35%~. In spite of large differences in the estimated MMB, the management advice from 'Vary q' was only 10% more than 'Vary M' were only 10% different (77.08 vs. 70.88 kt). This similarity in OFLs is a function of the large F~35%~ and small B~35%~ from 'Vary M' relative to 'Vary q'. However, if both processes were allowed to vary in the assessment ('Vary both'), the calculated OFL was 81% smaller than the when only one process was allowed to vary. Furthermore, if the smoothness penalty used for 'Vary both' was used in 'Vary M', the calculated OFLs were similar, suggesting relatively unstable estimation of time-varying M.
 
-The shape of the estimated curve representing the probability of maturing for both sexes were similar within sex, but the magnitude of the probabilities varied, most strongly for males in the 70-90 mm carapace width range (\autoref{predmat}). The estimated probability of maturing at smaller sizes was consistently higher for females in GMACS and this is related to the change from a kinked growth curve to a linear growth model. The 'hump' at 32.5 mm carapace width for females is likely related to the specified curve that determines what fraction of incoming recruitment is placed in which length bin, which has a peak at the same spot as the probability of maturing.  Model 20.2mq had the highest fraction of sublegal and sub-industry-preferred crab maturing.
-
-Estimated fishing mortality scaled with estimated population size across models (\autoref{predfmort}). GMACS models generally estimated fishing mortality lower than the status quo models during survey era 1. Estimated fishery and discard selectivity were dissimilar between model type (i.e. GMACS vs. status quo), which is related to how selectivity and fishing mortality are treated in the code (see the May 2020 snow crab document for more discussion). GMACS estimates of female discard mortality were lower than the status quo, but, when balanced with changes in estimated selectivity, the estimated catches were similar to the status quo (\autoref{catchfits}).
-
-Patterns in estimated recruitment by sex were similar for both GMACS and status quo models, but GMACS estimates were more variable than the status quo estimates (\autoref{recruits}).There was a considerable amount of variability in recruitment estimates for 2015 among models, and GMACS had the highest estimates. Recruitment was larger in GMACS than the status quo model and the size of this recruitment is a strong driver of the current year MMB and OFL. When the status quo model is forced to fit the data in a similar manner to GMACS, the estimated recruitment from the status quo model is very similar to GMACS, as is the estimated OFL (175 kt; \autoref{force_mmb}).  
-
-Estimated natural mortality from the GMACS model for immature crab was higher than the status quo models, in spite of identical priors (\autoref{nat_m}). Estimated immature natural mortality was generally higher than mature natural mortality in GMACS, which was not seen in the status quo model for females. Estimates of mean natural mortality were smaller for models in which natural mortality was allowed to vary over time than for those in which natural mortality was constant over time. Natural mortality sharply increased in the last several years for 20.2m, but only rose sharply in the last three for 20.2mq and reaching higher mortality levels (\autoref{vary_nat_m}).
-
-The differences in estimated population processes and fits to the data resulted in differences in management advice. The terminal year of estimated mature male biomass varied from 43,290 t to 133,510 t, with models estimating time-varying natural mortality returning much lower mature male biomass than those that did not. The corresponding target biomasses were also much lower for models incorporating time-varying natural mortality because the projections used to calculate B~35%~ are based on the terminal years of estimated natural mortality, which were quite high (\autoref{vary_nat_m}). An additional effect of increases in estimated natural mortality (and changes in the probability of terminally molting; \autoref{predmat}) were large increases in F~35%~. In spite of large differences in the estimated MMB, the management advice from 'Vary q' was only 10% more than 'Vary M' were only 10% different (77.08 vs. 70.88 kt). This similarity in OFLs is a function of the large F~35%~ from 'Vary M'.
-
-Management advice
 
 # Discussion
-Recap
-Simplicity vs. complexity
-Meaning of reference points in a changing environment
-Increasing prevalence of this sort of problem in natural resource management
-Strategies for confronting this issues
+Time-variation in population processes appears to be an issue for snow crab, but data to inform changes in population processes over time are lacking. Allowing M or q to vary over time within the assessment lead to improved fits to the data and reductions in retrospective patterns, but the management advice differed by almost an order of magnitude. Further, estimates of time-varying natural mortality among assessment variants and other published models fit to the same data (Murphy et al. 2019) were quite different in character (\autoref{vary_nat_m_q}). Ultimately, the Crab Plan Team, which is the first level of peer review for the assessments used for crab in the Bering Sea, chose not to endorse models that allowed time-varying q or M for use in management because the estimates of q and M varied more drastically than seemed reasonable and there was no clear mechanism to support the variability.
 
-Problem with decisions based onthe terminal year of data
+Improvements in fit and reductions in retrospective patterns with additional model flexibility is an expected outcome and is not unique to either snow crab or size-structured models. Szuwalski et al. (2019) demonstrated a similar outcome in a simulation study based on a cod-like life history with age-structured assessment models. Retrospective patterns were induced by simulating data with time-variation in growth, selectivity, or natural mortality and fitting assessment models that did not model time-variation in those processes. Next, assessment models that allowed either growth, selectivity, or natural mortality were fit to the data. Implementing any of these time-varying processes reduced the retrospective pattern, but the resulting management advice resulted in over- or under-exploiting the stock if the incorrect process was allowed to vary. One of the main recommendations of the paper was that an understanding of what process is time-varying is recommended before implementation of time-variation in integrated assessments.
 
-Changes in character of the estimated time variation in q and M when both are estimated.
-Changes and instability in the management advice. 
+The confounding of these processes is a central challenge in assessment (REF). However, if processes are stationary and models are appropriately specified, on average, the estimate and derived quantities used in management should reflect the underlying population. Still, even if on average the quantities used in management are not in error, large deviations in a given process in the terminal year of available data for assessment can be present problems for management. Following noise instead of signal.
 
-Different modeling paradigms/plotforms with the same data (but not identical assumptions) give different answers (Murphy).
-Needs for data that directly informs time variation in these processes.
-There are still other confounded processes: Maturing, growth, shape of survey selectivity curve.
+This is a particularly insidious problem when changes in population processes occur in the terminal year of available data because the information about 'what happened' can be gleaned when the problem year is put in context of the years before and after it. If the population appears to decline, but then reappears in the next year, changes in selectivity/catchability 
 
-Time-varying catchability and natural mortality are explored below in the status quo model and result in smaller retrospective patterns, but produce different management advice. Implementing any new time-varying process in an assessment with a retrospective pattern will improve the retrospective pattern, but management advice can be drastically in error if the incorrect process is allowed to vary (Szuwalski et al., 2019).  Consequently, an understanding of what process is time-varying is recommended before implementation of time-variation in integrated assessments.
+Retrospective patterns and the resulting incorrect management advice will likely be an increasingly prevalent problem as populations respond to a changing environment if appropriate ways of incorporating time-variation into assessment cannot be found. changes in distribution (Pinksy), changes in productivity (Szuwalski), changes in growth (REF), change in M (REf). Reference points are an even harder question in a changing environment. Collie's paper on strategies?
+
+This is not a problem we can model our way out of with the currently available data. We need more data to directly inform time-variation in these processes. Time-varying M like ICES?
+
+
 
 We know it is hard to estimate time variation in many processes with the data often available for population dynamics modeling. (Johnson et al. 2014)
 
@@ -318,9 +306,10 @@ Generally, fitting multiple data sources in an integrated model is preferable wh
 
 It is often thought that estimates of population processes can be improved by fitting multiple data sources because the information content in multiple data sources can corroborate and clarify the role of different processes in the population dynamics. This works well if the model is well-specified, but if it is not, estimating within an integrated assessment could result in incorrect inference about population processes. 
 
-One of the key uncertainties is that we do not know if the variability observed in the survey biomass is caused primarily by issues related to the survey methods (e.g. time-varying catchability or measurement error) or by issues related to population dynamics (e.g. time-varying natural mortality or other sorts of process error). 
 
 
+# Acknowledgments
+I'd like to thank Jack Turnock for passing the status quo code down to me upon his retirement. The github repository for this paper can be found at: https://github.com/szuwalski/snow_time_m
 
 \newpage
 
@@ -332,7 +321,11 @@ Fonseca, D. B., B. Sainte-Marie, and F. Hazel. 2008. Longevity and change in she
 
 Fournier, D.A. and C.P. Archibald. 1982.  A general theory for analyzing catch-at-age data. Can.J.Fish.Aquat.Sci. 39:1195-1207.
 
+Jacobsen, N.S., Essington, T.E. 2018. Natural mortality augments population fluctuations of forage fish. Fish and Fisheries. 19(5): 791-797.
+
 Methot, R. D.  1990.  Synthesis model: An adaptable framework for analysis of diverse stock assessment data.  Int. N. Pac. Fish. Comm. Bull. 50:259-277.
+
+Murphy, J.T., Rugolo, L.J., Turnock, B.J. 2018. Estimation of annual, time-varying natural mortality and survival for Eastern Bering Sea snow crab with state-space population models. Fisheries Research. 205: 122-131.
 
 Nevissi, A.E., J.M. Orensanz, A.J.Paul, and D.A. Armstrong. 1995.  Radiometric Estimation of shell age in Tanner Crab, Chionoecetes opilio and C. bairdi, from the eastern Bering Sea, and its use to interpret indices of shell age/condition.  Presented at the International symposium on biology, management and economics of crabs from high latitude habitats October 11-13, 1995, Anchorage, Alaska.
 
@@ -344,13 +337,26 @@ Paul, A.J., J.M. Paul and W.E. Donaldson.  1995.  Shell condition and breeding s
 
 Sainte-Marie, B., J. Sevigny and M. Carpentier.  2002.  Interannual variability of sperm reserves and fecundity of primiparous females of the snow crab (Chionoecetes opilio) in relation to sex ratio.  Can.J.Fish.Aquat.Sci. 59:1932-1940. 
 
+Schaefer, M.B. 1954. Some aspects of the dynamics of populations important to the management of commercial marine fisheries. Bulletin of the Inter-American Tropical Tuna Commission. 1(2): 27-56.
+
 Somerton, D.A. Weinberg, K.L., Goodman, S.E. 2013. Catchability of snow crab by the eastern Bering Sea bottom trawl survey estimated using a catch comparison experiment.  Can.J.Fish.Aquat.Sci. 70: 1699-1708.
+
+Stawitz, C.C., Haltuch, M.A., Johnson, K.F. 2019. How does growth misspecficiation affect management advice derived from an integrated fisheries stock assessment model?" Fisheres Research. 213: 12-21.
+
+Szuwalski, C.S. and Hollowed, A.B. 2016. Climate change and non-stationary population processes in fisheries management. ICES j. Mar Sci. 73(5): 1297-1305.
 
 Szuwalski, C.S., Ianelli, J.N., Punt, A.E. 2019. Reducing retrospective patterns in stock assessment and impacts on management performance. ICES Journal of Marine Science. 75(2): 596-609.
 
+Taylor, I.G., Methot, R.D. 2013. Hiding or dead? A computationall efficient model of selective fisheries mortality. fisheries research. 142: 75-85.
+
+Thomspon, G.G. 1994. Confounding of gear selectivity and natural mortality rate in cases where the former is a nonmonotone function of age. CJFAS. 51(12): 
+
+Thorson, J.T., Monnahan, C.C., Cope, J.M. 2015. The potential impact of time-variation in vital rates on fisheries management argets for marine fishes. 169: 8-17.
+
+Wilberg, M.J., Thorson, J.T., Linton, B.C., Berkson, J. 2009. Incorporating time-varying catchability into population dynamics stock assessment models. Reviews in Fishery Science. 18(1): 7-24.
 
 
-\newpage
+
 
 \newpage
 
@@ -509,6 +515,45 @@ Smoothing penalties were also placed on some estimated vectors of parameters in 
 \newpage
 
 
+
+```{r,echo=FALSE,warning=FALSE,message=F}
+
+LikeNames<-read.csv(paste("LikelihoodComponentNames.txt",sep=""),header=F)
+
+OutLikes<-rep(list(list()),length(Scenarios))
+for(x in 1:length(Scenarios))
+ OutLikes[[x]]<-readLines(paste(Scenarios[x],"/2016sc.REP",sep=""))[2]
+
+# format all the above into a tabular format
+tmpMat<-matrix(ncol=length(Scenarios)+1,nrow=nrow(LikeNames))
+
+for(x in 1:length(Scenarios))
+  tmpMat[,1+x]<-round(as.numeric(unlist(strsplit(OutLikes[[x]],split=" ")))[2:(nrow(tmpMat)+1)],2)
+
+LikeForm<-read.csv(paste("Likelihood components and weightings.csv",sep=""),header=T)
+
+PlotTab<- data.frame(tmpMat)
+PlotTab[,1]<-LikeForm[,2]
+colnames(PlotTab)<- c("Likelihood component",ScenarioNames)
+## break apart catch and survey numbers
+## add cvs for survey
+
+rownames(PlotTab)<- NULL
+
+AddTot<-c("Total",apply(PlotTab[,2:ncol(PlotTab)],2,sum))
+#PlotTab[,3:7]<-PlotTab[,2]-PlotTab[,3:7]
+PlotTab<-rbind(PlotTab,AddTot)
+
+# levels(PlotTab[,1])[31]<-"Total"
+# PlotTab[31,1]<-as.factor("Total")
+
+pander(PlotTab,split.cells=c(6,rep(6,length(Scenarios))),split.table=Inf,justify=c("left",rep("center",length(Scenarios))),caption="\\label{objfun}Contribution to the objective function by individual likelihood component by modeling scenario. Values in columns after Model 0 are the likelihood contribution of Model 0 minus the likelihood contribution of the model in the column.  Positive values represent improvements in fit. Note that some of the model scenarios involve changing the weightings of data sources which invalidate the comparison of likelihoods for a data source among models.")
+
+```
+
+
+\newpage
+
 ```{r,echo=FALSE,warning=FALSE,message=F}
 
 
@@ -544,43 +589,6 @@ rownames(PlotTab)<- NULL
 PlotTab[,c(2:6)]<-round(PlotTab[,c(2:6)],2)
 kable(PlotTab[,c(1:8)],split.cells=c(25,rep(7,5)),justify=c("left",rep("center",5)),caption="\\label{stepchange}Changes in management quantities for each scenario considered. Reported management quantities are derived from maximum likelihood estimates. Reported natural mortality is for mature males and average recruitment is for males.")
 
-
-```
-
-\newpage
-
-```{r,echo=FALSE,warning=FALSE,message=F}
-
-LikeNames<-read.csv(paste("LikelihoodComponentNames.txt",sep=""),header=F)
-
-OutLikes<-rep(list(list()),length(Scenarios))
-for(x in 1:length(Scenarios))
- OutLikes[[x]]<-readLines(paste(Scenarios[x],"/2016sc.REP",sep=""))[2]
-
-# format all the above into a tabular format
-tmpMat<-matrix(ncol=length(Scenarios)+1,nrow=nrow(LikeNames))
-
-for(x in 1:length(Scenarios))
-  tmpMat[,1+x]<-round(as.numeric(unlist(strsplit(OutLikes[[x]],split=" ")))[2:(nrow(tmpMat)+1)],2)
-
-LikeForm<-read.csv(paste("Likelihood components and weightings.csv",sep=""),header=T)
-
-PlotTab<- data.frame(tmpMat)
-PlotTab[,1]<-LikeForm[,2]
-colnames(PlotTab)<- c("Likelihood component",ScenarioNames)
-## break apart catch and survey numbers
-## add cvs for survey
-
-rownames(PlotTab)<- NULL
-
-AddTot<-c("Total",apply(PlotTab[,2:ncol(PlotTab)],2,sum))
-#PlotTab[,3:7]<-PlotTab[,2]-PlotTab[,3:7]
-PlotTab<-rbind(PlotTab,AddTot)
-
-# levels(PlotTab[,1])[31]<-"Total"
-# PlotTab[31,1]<-as.factor("Total")
-
-pander(PlotTab,split.cells=c(6,rep(6,length(Scenarios))),split.table=Inf,justify=c("left",rep("center",length(Scenarios))),caption="\\label{objfun}Contribution to the objective function by individual likelihood component by modeling scenario. Values in columns after Model 0 are the likelihood contribution of Model 0 minus the likelihood contribution of the model in the column.  Positive values represent improvements in fit. Note that some of the model scenarios involve changing the weightings of data sources which invalidate the comparison of likelihoods for a data source among models.")
 
 ```
 
@@ -675,13 +683,6 @@ include_graphics("plots/figure_2.png")
 
 \newpage
 
-```{r,echo=FALSE,warning=FALSE,message=F,out.height="100%",fig.cap="\\label{retro_mult}Retrospective patterns in mature male biomass for all models in the analysis."}
-
-include_graphics("plots/mult_retro.png")
-
-```
-
-\newpage
 
 
 ```{r,echo=FALSE,warning=FALSE,message=F,fig.width=8.5,fig.height=7,fig.cap="\\label{mmbfits}Model fits to the observed mature biomass at survey"}
@@ -706,10 +707,10 @@ for(j in 1:length(SurveyYrs[[2]]))
 
 
 for(x in 1:length(snowad.rep))
-lines(as.numeric(unlist(snowad.rep[[x]]$"Predicted Male survey mature Biomass"))[1:SurvYrN[[x]]]~na.omit(SurveyYrs[[x]]),type="l",lty=1,lwd=in_lwd,col=x)
+lines(as.numeric(unlist(snowad.rep[[x]]$"Predicted Male survey mature Biomass"))[1:SurvYrN[[x]]]~na.omit(SurveyYrs[[x]]),type="l",lty=x,lwd=in_lwd,col=x)
 
 legend("topleft",bty='n',"Males")
-legend("topright",bty='n',lty=1,legend=ScenarioNames,col=seq(1,length(ScenarioNames)))
+legend("topright",bty='n',lty=seq(1,4),legend=ScenarioNames,col=seq(1,length(ScenarioNames)))
 
 #==mature female biomass==============
 plot(as.numeric(unlist(snowad.rep[[2]]$"Observed survey female spawning biomass"))[1:SurvYrN[[2]]]~na.omit(SurveyYrs[[2]]),pch=20,ylab="Mature Female Biomass (1000 t)",xlab="Year",las=1,ylim=c(0,450));
@@ -725,7 +726,7 @@ for(j in 1:length(SurveyYrs[[2]]))
 axis(side=1,las=1)
 
 for(x in 1:length(snowad.rep))
-  lines(as.numeric(unlist(snowad.rep[[x]]$"Predicted Female survey mature Biomass"))[1:SurvYrN[[x]]]~na.omit(SurveyYrs[[x]]),type="l",lty=1,lwd=in_lwd,col=x)
+  lines(as.numeric(unlist(snowad.rep[[x]]$"Predicted Female survey mature Biomass"))[1:SurvYrN[[x]]]~na.omit(SurveyYrs[[x]]),type="l",lty=x,lwd=in_lwd,col=x)
 
 legend("topleft",bty='n',"Females")
 mtext(side=2,outer=T,line=2.5,"Biomass (1000t)")
@@ -757,51 +758,26 @@ for(j in 1:length(SurveyYrs[[2]]))
 
 
 for(x in 1:length(snowad.rep))
-lines(as.numeric(unlist(snowad.rep[[x]]$"Predicted Male survey mature Biomass"))[1:SurvYrN[[x]]]~na.omit(SurveyYrs[[x]]),type="l",lty=1,lwd=2,col=x)
+lines(as.numeric(unlist(snowad.rep[[x]]$"Predicted Male survey mature Biomass"))[1:SurvYrN[[x]]]~na.omit(SurveyYrs[[x]]),type="l",lty=x,lwd=2,col=x)
 mtext(side=2,line=2.3,"MMB (1000t)")
 mtext(side=1,line=2.3,"Year")
 legend("topleft",bty='n',"Males")
-legend("topright",bty='n',lty=1,legend=ScenarioNames,col=seq(1,length(ScenarioNames)))
+legend("topright",bty='n',lty=seq(1,4),legend=ScenarioNames,col=seq(1,length(ScenarioNames)))
 
 ```
 
 
 \newpage
 
-```{r,echo=FALSE,warning=FALSE,message=F,fig.width=6.5,fig.height=5,fig.cap="\\label{vary_nat_m_q}Estimated time varying natural mortality for mature males and catchability."}
 
-murph_m<-read.csv('data/murphy_m.csv')
+```{r,echo=FALSE,warning=FALSE,message=F,out.height="100%",fig.cap="\\label{retro_mult}Retrospective patterns in mature male biomass for all models in the analysis."}
 
-par(mfrow=c(2,1),mar=c(.1,.1,.1,.1),oma=c(4,4,1,1))
-natM<-NULL
-plot(-1000,xlim=c(min(SurveyYrs[[4]]),max(SurveyYrs[[4]])),ylim=c(0,5),las=1,xaxt='n')
-for(x in 3:4) 
- lines(snowad.rep[[x]]$"atural mortality mature"[2,1:(length(SurveyYrs[[x]])+1)]~ c(SurveyYrs[[x]],2020),col=x,lty=1,lwd=2)
+include_graphics("plots/mult_retro.png")
 
- 
-legend("top",bty='n',legend=ScenarioNames[-1],lwd=1,col=seq(1,length(ScenarioNames))[-1])
-   legend('topleft',bty='n',lty=2,"Murphy et al.")
-   lines(x=murph_m$year,y=murph_m$M,lty=2,lwd=2)
-
- mtext(side=2,line=2.5,"Natural mortality (yr^-1)")
- plot(-1000,xlim=c(min(SurveyYrs[[2]]),max(SurveyYrs[[2]])),ylim=c(0,1),ylab='',las=1,xlab="",lwd=2)
-
-for(x in 1:length(snowad.rep))
-{
-  if(length(snowad.rep[[x]]$"selectivity survey female Era 3")>length(LengthBins[[x]]))
-  {
-    lines(snowad.rep[[x]]$"selectivity survey male Era 3"[,22] ~ seq(1988,max(SurveyYrs[[x]])+1),col=x,lty=1,lwd=2)
-    }
-}
-mtext(side=2,line=2.2,"Catchability")
-
-mtext(side=1,line=2.5,"Year")
-axis(side=1,at=c(1982,1990,2000,2010,2020))
- 
 ```
 
-
 \newpage
+
 
 ```{r,echo=FALSE,warning=FALSE,message=F,fig.width=8,fig.height=5,fig.cap="\\label{predmmb}Model predicted mature biomass at mating time. Dotted horizontal lines are target biomasses."}
 #=========================================================
@@ -827,6 +803,7 @@ axis(side=1,at=c(1982,1990,2000,2010,2020))
 
 \newpage
 
+
 ```{r,echo=FALSE,warning=FALSE,message=F,fig.width=4,fig.height=9,fig.cap="\\label{est_pop_proc} Estimated probability of maturing, directed fishing mortality, and recruitment for males."}
 
 # molting probabillities, weight at length
@@ -837,25 +814,25 @@ plot(snowad.rep[[1]]$"Predicted probability of maturing male"~LengthBins[[1]],ty
 for(x in 1:length(snowad.rep))
 {
 #lines(snowad.rep[[x]]$"Predicted probability of maturing female"~LengthBins[[x]], col=x,ylim=c(0,1),ylab='',las=1,xlab="",xaxt='n',lty=1,lwd=2)
-lines(snowad.rep[[x]]$"Predicted probability of maturing male"~LengthBins[[x]],col=x,ylim=c(0,1),ylab='',las=1,xlab="",xaxt='n',lty=1,lwd=2)
+lines(snowad.rep[[x]]$"Predicted probability of maturing male"~LengthBins[[x]],col=x,ylim=c(0,1),ylab='',las=1,xlab="",xaxt='n',lty=x,lwd=2)
 }
 
 
 
-legend("topleft",bty='n',lty=1,col=seq(1,length(ScenarioNames)),legend=ScenarioNames,lwd=2)
+legend("topleft",bty='n',lty=seq(1,4),col=seq(1,length(ScenarioNames)),legend=ScenarioNames,lwd=2)
 
 mtext(side=2,"Probability of terminal molt",line=2.5)
 
 plot(snowad.rep[[1]]$"estimated annual total fishing mortality"~RetCatchYrs[[1]], type="l",las=1,xaxt='n',xlim=c(min(unlist(RetCatchYrs)),max(unlist(RetCatchYrs))),ylim=c(0,5),lwd=inlwd,xaxt='n')
 for(x in 1:length(snowad.rep))
-lines(snowad.rep[[x]]$"estimated annual total fishing mortality"~RetCatchYrs[[x]], lwd=inlwd,lty=1,col=x)
+lines(snowad.rep[[x]]$"estimated annual total fishing mortality"~RetCatchYrs[[x]], lwd=inlwd,lty=x,col=x)
  mtext(side=2,"Directed fishing mortality",line=2.5)
  
  plot(snowad.rep[[1]]$"estimated number of recruits male"/10000~SurveyYrs[[1]][1:(length(SurveyYrs[[1]]))],ylab="",type="l",
      las=1,xlab="",ylim=c(0,2000),col=1,lwd=2)
 
 for(y in 1:length(snowad.rep))
-  lines(snowad.rep[[y]]$"estimated number of recruits male"/10000~SurveyYrs[[y]][1:(length(SurveyYrs[[y]]))],lty=1,col=y,lwd=inlwd)
+  lines(snowad.rep[[y]]$"estimated number of recruits male"/10000~SurveyYrs[[y]][1:(length(SurveyYrs[[y]]))],lty=x,col=y,lwd=inlwd)
   
  legend("topleft",bty='n',legend=c('Males'))
   mtext(side=2,"Recruits (billions)",line=3)
@@ -863,6 +840,44 @@ for(y in 1:length(snowad.rep))
 
 
 ```
+
+\newpage
+
+```{r,echo=FALSE,warning=FALSE,message=F,fig.width=6.5,fig.height=5,fig.cap="\\label{vary_nat_m_q}Estimated time varying natural mortality for mature males and catchability."}
+
+murph_m<-read.csv('data/murphy_m.csv')
+
+par(mfrow=c(2,1),mar=c(.1,.1,.1,.1),oma=c(4,4,1,1))
+natM<-NULL
+plot(-1000,xlim=c(min(SurveyYrs[[4]]),max(SurveyYrs[[4]])),ylim=c(0,5),las=1,xaxt='n')
+for(x in 3:4) 
+ lines(snowad.rep[[x]]$"atural mortality mature"[2,1:(length(SurveyYrs[[x]])+1)]~ c(SurveyYrs[[x]],2020),col=x,lty=x,lwd=2)
+
+ 
+legend("top",bty='n',legend=ScenarioNames[-1],lwd=1,col=seq(1,length(ScenarioNames))[-1],lty=seq(2,4))
+   legend('topleft',bty='n',lty=2,"Murphy et al.")
+   lines(x=murph_m$year,y=murph_m$M,lty=2,lwd=2)
+
+ mtext(side=2,line=2.5,"Natural mortality (yr^-1)")
+ plot(-1000,xlim=c(min(SurveyYrs[[2]]),max(SurveyYrs[[2]])),ylim=c(0,1),ylab='',las=1,xlab="",lwd=2)
+
+for(x in 1:length(snowad.rep))
+{
+  if(length(snowad.rep[[x]]$"selectivity survey female Era 3")>length(LengthBins[[x]]))
+  {
+    lines(snowad.rep[[x]]$"selectivity survey male Era 3"[,22] ~ seq(1988,max(SurveyYrs[[x]])+1),col=x,lty=x,lwd=2)
+    }
+}
+mtext(side=2,line=2.2,"Catchability")
+
+mtext(side=1,line=2.5,"Year")
+axis(side=1,at=c(1982,1990,2000,2010,2020))
+ 
+```
+
+
+
+
 
 \newpage
 
