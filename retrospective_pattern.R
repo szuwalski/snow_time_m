@@ -272,7 +272,7 @@ plot(as.numeric(unlist(snowad.rep[[x]]$"Observed survey male spawning biomass"))
 lines(as.numeric(unlist(snowad.rep[[x]]$"Predicted Male survey mature Biomass"))[1:SurvYrN[[x]]]~na.omit(SurveyYrs[[x]]),
       type="l",lwd=2,col=1)
 
-if(x==retro_inds[1])legend("topleft",bty='n',"Males")
+#if(x==retro_inds[1])legend("topleft",bty='n',"Males")
 legend("topright",bty='n',legend=ScenarioNames[x])
 for(j in 1:length(SurveyYrs[[2]]))
 {
@@ -303,5 +303,5 @@ for(y in 1:9)
 #round(mean(retro_pat[2:retro]),1)
 legend("top",bty='n', cex=1,legend=paste("Mohn's rho : ",round(mean(retro_pat[1:retro]),2),sep=" "))
 }
-mtext(side=2,outer=T,"Mature male biomass (1000t)",line=2.5)
+mtext(side=2,outer=T,"Mature male biomass (1000 mt)",line=2.5)
 dev.off()   

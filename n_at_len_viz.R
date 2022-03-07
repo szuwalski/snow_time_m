@@ -89,10 +89,10 @@ grow_m<-data.frame(Size=seq(27.5,132.5,5),
                    value=c(growed_m))
 #==remove natural mortality
 #==plot line
-
+library(RColorBrewer)
 png("plots/n_at_len_stack.png",height=8,width=8,res=400,units='in')
 stack_p<-ggplot(melted) +
-  geom_line(aes(x=Size,y=value,group=Year,col=Year),lwd=1.5) +
+  geom_line(aes(x=Size,y=value,group=as.factor(Year),col=as.factor(Year)),lwd=1.5) +
   gghighlight(Year > 2014,Year<2019, use_direct_label = FALSE)+
   theme_bw() +
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -101,7 +101,9 @@ stack_p<-ggplot(melted) +
   labs(y="Numbers (1000000s)",x="Carapace width (mm)") +
   geom_line(data=filter(melted,Year==2019),
             aes(x=Size,y=value),col='red',lwd=1.5) +
-  geom_line(data=grow_m,aes(x=Size,y=value),col='green',lwd=1.5,lty=2)
+  geom_line(data=grow_m,aes(x=Size,y=value),col='green',lwd=1.5,lty=2)+ 
+  scale_color_manual(values = colorRampPalette(brewer.pal(9, "Blues"))(9)[5:9])+
+  labs(col="Year")
 print(stack_p)
 dev.off()
 
